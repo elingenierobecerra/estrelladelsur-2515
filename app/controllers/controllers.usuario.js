@@ -8,14 +8,27 @@ export const crearUsuario = (req, res)=>{
         "respuesta":"Esto es un post para agregar "+ nombre 
     })
 }
-export const mostrarUsuario = (req, res)=>{
 
-    res.json({
-        "nombre":"Julian",
-        "apellido":"Vergara",
-        "telefono":521257
-    });
+
+export const mostrarUsuario = async(req, res)=>{
+
+    try {
+        
+        const resultado = await pool.query("select * from usuario");
+        res.json(resultado[0]);
+
+    } catch (error) {
+        res.json({
+            "error":error,
+            "method": "get"
+        })
+    }
+
 }
+
+
+
+
 export const actulizarUsuario = (req, res)=>{
 
     console.log(req.body);
