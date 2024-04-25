@@ -1,18 +1,18 @@
 import express from "express";
+import rutaUsuario from "./routes/routes.usuario.js";
+// import ruta from "./routes/index.js";
 
 const app = express();
 
+// MIDDLEWARES
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // RUTAS
 app.get("/", (req, res)=>{
-    res.send("Hola humanos");
+    res.send("Bienvindioa a la aplicacion de los usuairo");
 });
 
-app.get("/gallery", (req, res)=>{
-    res.send("Bienvenidos a mis fotos");
-});
-
-app.get("/usuario", (req, res)=>{
-    res.json({"mensaje":"Ingresa tus datos basicos"});
-});
+app.use("/api", rutaUsuario);
 
 export default app;
