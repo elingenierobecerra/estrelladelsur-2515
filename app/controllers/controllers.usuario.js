@@ -1,12 +1,39 @@
 import { pool } from "../../config/db_mysql.js";
 
-export const crearUsuario = (req, res)=>{
-    console.log(req.body);
-    let nombre = req.body.name;
+export const crearUsuario = async(req, res)=>{
 
-    res.json({
-        "respuesta":"Esto es un post para agregar "+ nombre 
-    })
+    let info = req.body;
+
+    try {
+        let resultado = await pool.query(`
+            insert into usuario(
+                idusuario,identificacion,
+                nombres,correo,
+                contrasena,telefono) values
+                (
+                    ${info.idusuario},"${info.identificacion}",
+                    "${info.nombres}","${info.correo}",
+                    "${info.contrasena}","${info.telefono}"
+                )
+        `)
+
+        if (resultado[0].affectedRows > 0 ){
+            res.json({
+                respuesta:"registro insertado"
+            })
+        }else{
+            res.json({
+                respuesta:"No inserto nada"
+            })
+        }
+        
+    } catch (error) {
+        res.json({
+            "error":error,
+            "method": "post"
+        })
+    }
+
 }
 
 
@@ -26,16 +53,37 @@ export const mostrarUsuario = async(req, res)=>{
 
 }
 
+export const actulizarUsuario = async(req, res)=>{
+    let info = req.body;
 
+    try {
+        let resultado = await pool.query(`
+            update usuario
+            set 
+            identificacion = '${info.identificacion}',
+            nombres = '${info.nombres}',
+            correo = '${info.correo}',
+            contrasena = '${info.contrasena}',
+            telefono = '${info.telefono}'
+            where idusuario = ${info.idusuario}
+        `)
 
-
-export const actulizarUsuario = (req, res)=>{
-
-    console.log(req.body);
-    let nombre = req.body.name;
-    res.json({
-        "respuesta":"Esta ruta es para actulizar "+ nombre 
-    });
+        if (resultado[0].affectedRows > 0 ){
+            res.json({
+                respuesta:"registro modificado"
+            })
+        }else{
+            res.json({
+                respuesta:"No modifico nada"
+            })
+        }
+        
+    } catch (error) {
+        res.json({
+            "error":error,
+            "method": "put"
+        })
+    }
 
 }
 export const eliminarUsuario = (req, res)=>{
