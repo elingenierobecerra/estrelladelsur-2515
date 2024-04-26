@@ -54,6 +54,7 @@ export const mostrarUsuario = async(req, res)=>{
 }
 
 export const actulizarUsuario = async(req, res)=>{
+
     let info = req.body;
 
     try {
@@ -86,10 +87,32 @@ export const actulizarUsuario = async(req, res)=>{
     }
 
 }
-export const eliminarUsuario = (req, res)=>{
-    console.log(req.body);
-    let id = req.body.id;
-    res.json({
-        "respuesta":"Esta ruta es para borrar "+ id 
-    });
+export const eliminarUsuario = async(req, res)=>{
+
+    let info = req.body;
+
+    try {
+        let resultado = await pool.query(`
+            delete from usuario
+            where idusuario = ${info.idusuario}
+        `)
+
+        if (resultado[0].affectedRows > 0 ){
+            res.json({
+                respuesta:"registro borrado"
+            })
+        }else{
+            res.json({
+                respuesta:"No borro nada"
+            })
+        }
+        
+    } catch (error) {
+        res.json({
+            "error":error,
+            "method": "delete"
+        })
+    }
+
+
 }
