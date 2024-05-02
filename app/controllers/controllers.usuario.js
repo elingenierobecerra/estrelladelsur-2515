@@ -1,5 +1,5 @@
 import { pool } from "../config/db_mysql.js";
-
+import { tokenSign } from "../middlewares/middleware.usuario.js";
 export const crearUsuario = async(req, res)=>{
 
     let info = req.body;
@@ -123,7 +123,6 @@ export const loginUsuario = async(req, res)=>{
         select correo from usuario
         where correo = '${correo}' and contrasena = '${contrasena}'
         `);
-        console.log(resultado[0]);
 
         if (resultado[0]==""){
             res.json({
@@ -131,6 +130,13 @@ export const loginUsuario = async(req, res)=>{
                 estado:false
             });
         }else{
+            let token = tokenSign({
+                correo:correo,
+                contrasena:contrasena
+            });
+            // Guardar token en las cookies
+            res.cookie("token", token);
+
             res.json({
                 respuesta:"Logueo correcto",
                 estado:true
