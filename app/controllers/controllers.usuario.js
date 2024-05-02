@@ -1,4 +1,4 @@
-import { pool } from "../../config/db_mysql.js";
+import { pool } from "../config/db_mysql.js";
 
 export const crearUsuario = async(req, res)=>{
 
@@ -35,8 +35,6 @@ export const crearUsuario = async(req, res)=>{
     }
 
 }
-
-
 export const mostrarUsuario = async(req, res)=>{
 
     try {
@@ -52,7 +50,6 @@ export const mostrarUsuario = async(req, res)=>{
     }
 
 }
-
 export const actulizarUsuario = async(req, res)=>{
 
     let info = req.body;
@@ -115,4 +112,34 @@ export const eliminarUsuario = async(req, res)=>{
     }
 
 
+}
+export const loginUsuario = async(req, res)=>{
+    
+    let correo = req.body.correo;
+    let contrasena = req.body.contrasena;
+
+    try {
+        let resultado = await pool.query(`
+        select correo from usuario
+        where correo = '${correo}' and contrasena = '${contrasena}'
+        `);
+        console.log(resultado[0]);
+
+        if (resultado[0]==""){
+            res.json({
+                respuesta:"Logueo incorrecto",
+                estado:false
+            });
+        }else{
+            res.json({
+                respuesta:"Logueo correcto",
+                estado:true
+            });
+        }
+    } catch (error) {
+        res.json({
+            respuesta:"Error en el logueo",
+            type:error
+        })
+    }
 }
