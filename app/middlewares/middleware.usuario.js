@@ -19,3 +19,23 @@ export const verifyToken = (token) => {
         return null;
     }
 }
+export const validarPermiso = (req, res, next)=>{
+
+    let token = req.headers["x-access-token"];
+
+    try {
+        if (verifyToken(token)==null){
+            res.json({
+                "error":"No tiene permiso para acceder",
+                "token": "token invalido"
+            })
+        }else{
+            next();
+        }
+    } catch (error) {
+        res.json({
+            "error":error,
+            "token": "token invalido"
+        });
+    }
+}

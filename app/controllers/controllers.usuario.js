@@ -37,9 +37,11 @@ export const crearUsuario = async(req, res)=>{
 }
 export const mostrarUsuario = async(req, res)=>{
 
+    let id = req.params.id;
+
     try {
         
-        const resultado = await pool.query("select * from usuario");
+        const resultado = await pool.query(`select * from usuario where idusuario = ${id}`);
         res.json(resultado[0]);
 
     } catch (error) {
@@ -134,12 +136,11 @@ export const loginUsuario = async(req, res)=>{
                 correo:correo,
                 contrasena:contrasena
             });
-            // Guardar token en las cookies
-            res.cookie("token", token);
 
             res.json({
                 respuesta:"Logueo correcto",
-                estado:true
+                estado:true,
+                token:token
             });
         }
     } catch (error) {
@@ -148,4 +149,19 @@ export const loginUsuario = async(req, res)=>{
             type:error
         })
     }
+}
+export const listarUsuario = async(req, res)=>{
+
+    try {
+        
+        const resultado = await pool.query("select * from usuario");
+        res.json(resultado[0]);
+
+    } catch (error) {
+        res.json({
+            "error":error,
+            "method": "get"
+        })
+    }
+
 }
