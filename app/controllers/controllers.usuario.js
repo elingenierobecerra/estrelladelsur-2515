@@ -40,7 +40,7 @@ export const mostrarUsuario = async(req, res)=>{
     let id = req.params.id;
 
     try {
-        
+
         const resultado = await pool.query(`select * from usuario where idusuario = ${id}`);
         res.json(resultado[0]);
 
@@ -119,6 +119,8 @@ export const loginUsuario = async(req, res)=>{
     
     let correo = req.body.correo;
     let contrasena = req.body.contrasena;
+
+    // console.log(req.body);
 
     try {
         let resultado = await pool.query(`
