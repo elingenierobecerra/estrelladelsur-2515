@@ -16,4 +16,9 @@ rutaUsuario.post("/login", loginUsuario);
 rutaUsuario.put("/usuario", validarPermiso,actulizarUsuario);
 rutaUsuario.delete("/usuario", validarPermiso,eliminarUsuario);
 
+rutaUsuario.get("/prueba",(req, res)=>{
+    res.json({"mensaje":"Becerrra"});
+});
+
+
 export default rutaUsuario;
